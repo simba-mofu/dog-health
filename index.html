@@ -3,378 +3,454 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>愛犬の健康管理</title>
+<title>わんこ手帳</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #F7F4EF;
+    --bg: #F0F7FB;
     --surface: #FFFFFF;
-    --surface2: #F0EDE6;
-    --border: #E2DDD5;
-    --text: #2C2416;
-    --text2: #7A6E60;
-    --text3: #B0A898;
-    --accent: #C17C3A;
-    --accent-light: #FBF0E3;
-    --accent-border: #E8C49A;
-    --green: #4A7C59;
-    --green-light: #EAF2EC;
-    --blue: #3A6FA8;
-    --blue-light: #E8EFF8;
-    --red: #B34A4A;
-    --red-light: #F8EAEA;
+    --surface2: #E4F2F9;
+    --border: #C8E2EF;
+    --text: #1A3040;
+    --text2: #4A7090;
+    --text3: #90B8CC;
+    --accent: #2A8FBF;
+    --accent-dark: #1E6E96;
+    --accent-light: #E0F2FA;
+    --accent-border: #90CEE8;
+    --teal: #1A9E9E;
+    --teal-light: #E0F5F5;
+    --green: #2E8B5A;
+    --green-light: #E4F4EC;
+    --coral: #E05A3A;
+    --coral-light: #FDF0EC;
     --purple: #6B4FA8;
     --purple-light: #F0EAFB;
-    --radius: 12px;
-    --radius-sm: 8px;
+    --amber: #C07820;
+    --amber-light: #FDF4E0;
+    --radius: 14px;
+    --radius-sm: 9px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: 'Noto Sans JP', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    font-size: 15px;
-    line-height: 1.6;
-  }
+  body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; font-size: 15px; line-height: 1.6; }
+
+  /* ヘッダー */
   header {
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    padding: 1.25rem 1.5rem;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    position: sticky;
-    top: 0;
-    z-index: 10;
+    background: linear-gradient(135deg, #1E6E96 0%, #2AABCC 100%);
+    padding: 0;
+    position: sticky; top: 0; z-index: 100;
+    box-shadow: 0 2px 12px rgba(30,110,150,0.18);
   }
-  .logo {
-    font-family: 'DM Serif Display', serif;
-    font-size: 22px;
-    color: var(--accent);
-    letter-spacing: -0.5px;
+  .header-inner {
+    max-width: 760px; margin: 0 auto;
+    display: flex; align-items: center; gap: 12px;
+    padding: 1rem 1.25rem;
   }
-  .logo span { color: var(--text); font-size: 14px; font-family: 'Noto Sans JP', sans-serif; font-weight: 400; margin-left: 8px; color: var(--text2); }
-  .paw { font-size: 20px; }
+  .logo { font-family: 'DM Serif Display', serif; font-size: 22px; color: #fff; letter-spacing: -0.5px; }
+  .logo-sub { font-family: 'Noto Sans JP', sans-serif; font-size: 12px; color: rgba(255,255,255,0.75); margin-left: 8px; font-weight: 400; }
+  .paw { font-size: 22px; }
 
-  .container { max-width: 720px; margin: 0 auto; padding: 1.5rem 1rem 4rem; }
+  .container { max-width: 760px; margin: 0 auto; padding: 1.5rem 1rem 5rem; }
 
-  .tabs {
-    display: flex;
-    gap: 4px;
-    margin-bottom: 1.5rem;
+  /* 犬選択エリア */
+  .dog-bar {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    padding: 4px;
-    flex-wrap: wrap;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.25rem;
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  }
+  .dog-bar-label { font-size: 12px; font-weight: 700; color: var(--text2); text-transform: uppercase; letter-spacing: 0.08em; white-space: nowrap; }
+  .dog-chips { display: flex; gap: 6px; flex-wrap: wrap; flex: 1; }
+  .dog-chip {
+    display: flex; align-items: center; gap: 5px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    border: 1.5px solid var(--border);
+    background: var(--bg);
+    color: var(--text2);
+    font-size: 13px; font-weight: 500;
+    cursor: pointer; transition: all 0.15s;
+    font-family: inherit;
+  }
+  .dog-chip:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
+  .dog-chip.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .dog-chip .chip-del { font-size: 14px; opacity: 0.6; margin-left: 2px; }
+  .dog-chip.active .chip-del:hover { opacity: 1; }
+  .btn-add-dog {
+    padding: 6px 14px; border-radius: 20px;
+    border: 1.5px dashed var(--accent-border);
+    background: transparent; color: var(--accent);
+    font-size: 13px; font-weight: 500; cursor: pointer;
+    font-family: inherit; transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .btn-add-dog:hover { background: var(--accent-light); }
+
+  /* モーダル */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(20,50,70,0.45); z-index: 200;
+    align-items: center; justify-content: center;
+    padding: 1rem;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--surface); border-radius: var(--radius);
+    padding: 1.5rem; width: 100%; max-width: 360px;
+    box-shadow: 0 8px 32px rgba(30,110,150,0.18);
+  }
+  .modal h3 { font-size: 16px; font-weight: 700; margin-bottom: 1rem; color: var(--text); }
+  .modal-row { margin-bottom: 10px; }
+  .modal-actions { display: flex; gap: 8px; margin-top: 1.25rem; justify-content: flex-end; }
+
+  /* タブ */
+  .tabs {
+    display: flex; gap: 3px; margin-bottom: 1.25rem;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 4px; flex-wrap: wrap;
   }
   .tab {
-    flex: 1;
-    min-width: 80px;
-    padding: 8px 10px;
-    border: none;
-    border-radius: var(--radius-sm);
-    background: transparent;
-    color: var(--text2);
-    cursor: pointer;
-    font-size: 13px;
-    font-family: inherit;
-    font-weight: 500;
-    transition: all 0.15s;
-    text-align: center;
+    flex: 1; min-width: 72px; padding: 8px 8px;
+    border: none; border-radius: var(--radius-sm);
+    background: transparent; color: var(--text2);
+    cursor: pointer; font-size: 13px; font-weight: 500;
+    transition: all 0.15s; text-align: center; font-family: inherit;
   }
-  .tab:hover { background: var(--surface2); color: var(--text); }
+  .tab:hover { background: var(--accent-light); color: var(--accent); }
   .tab.active { background: var(--accent); color: #fff; }
-
   .section { display: none; }
   .section.active { display: block; }
 
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 1.25rem;
-    margin-bottom: 1rem;
-  }
-  .card-title {
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--text2);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-bottom: 1rem;
-  }
+  /* カード */
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem; margin-bottom: 1rem; }
+  .card-title { font-size: 12px; font-weight: 700; color: var(--text2); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
 
+  /* フォーム */
   .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 10px; }
   label { font-size: 12px; color: var(--text2); font-weight: 500; display: block; margin-bottom: 4px; }
   input, select, textarea {
-    width: 100%;
-    padding: 9px 11px;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    background: var(--bg);
-    color: var(--text);
-    font-family: inherit;
-    font-size: 14px;
-    transition: border-color 0.15s;
-    -webkit-appearance: none;
+    width: 100%; padding: 9px 11px;
+    border: 1px solid var(--border); border-radius: var(--radius-sm);
+    background: var(--bg); color: var(--text);
+    font-family: inherit; font-size: 14px;
+    transition: border-color 0.15s; -webkit-appearance: none;
   }
   input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent); background: var(--surface); }
   textarea { height: 72px; resize: vertical; }
-  select { cursor: pointer; }
 
-  .btn {
-    padding: 9px 20px;
-    border-radius: var(--radius-sm);
-    border: 1px solid var(--border);
-    background: var(--surface);
-    color: var(--text);
-    font-family: inherit;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.15s;
-  }
+  /* ボタン */
+  .btn { padding: 9px 20px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--surface); color: var(--text); font-family: inherit; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.15s; }
   .btn:hover { background: var(--surface2); }
   .btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
-  .btn-primary:hover { background: #A8692A; border-color: #A8692A; }
-  .btn-sm { padding: 5px 12px; font-size: 12px; }
+  .btn-primary:hover { background: var(--accent-dark); border-color: var(--accent-dark); }
+  .btn-ghost { background: transparent; border-color: var(--border); color: var(--text2); }
+  .btn-ghost:hover { background: var(--surface2); }
+  .btn-danger { background: var(--coral-light); color: var(--coral); border-color: #EABCB0; }
+  .btn-danger:hover { background: #FAE0D8; }
 
-  .records { }
-  .record-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    padding: 12px 0;
-    border-bottom: 1px solid var(--border);
-  }
+  /* 記録リスト */
+  .record-item { display: flex; align-items: flex-start; gap: 10px; padding: 12px 0; border-bottom: 1px solid var(--border); }
   .record-item:last-child { border-bottom: none; }
-  .record-dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    margin-top: 6px;
-    flex-shrink: 0;
-  }
+  .record-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
   .record-body { flex: 1; min-width: 0; }
   .record-main { font-size: 14px; color: var(--text); }
   .record-note { font-size: 12px; color: var(--text2); margin-top: 3px; }
   .record-date { font-size: 12px; color: var(--text3); white-space: nowrap; }
-  .del-btn {
-    background: none; border: none; cursor: pointer;
-    color: var(--text3); font-size: 16px; padding: 2px 6px;
-    border-radius: 4px; line-height: 1;
-  }
-  .del-btn:hover { color: var(--red); background: var(--red-light); }
+  .del-btn { background: none; border: none; cursor: pointer; color: var(--text3); font-size: 16px; padding: 2px 6px; border-radius: 4px; line-height: 1; }
+  .del-btn:hover { color: var(--coral); background: var(--coral-light); }
 
-  .badge {
-    display: inline-block;
-    font-size: 11px;
-    font-weight: 500;
-    padding: 2px 8px;
-    border-radius: 20px;
-    margin-right: 5px;
-    vertical-align: middle;
-  }
+  /* バッジ */
+  .badge { display: inline-block; font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 20px; margin-right: 5px; vertical-align: middle; }
+  .badge-blue { background: var(--accent-light); color: var(--accent); }
+  .badge-teal { background: var(--teal-light); color: var(--teal); }
   .badge-green { background: var(--green-light); color: var(--green); }
-  .badge-blue { background: var(--blue-light); color: var(--blue); }
-  .badge-amber { background: var(--accent-light); color: var(--accent); }
-  .badge-red { background: var(--red-light); color: var(--red); }
+  .badge-amber { background: var(--amber-light); color: var(--amber); }
+  .badge-coral { background: var(--coral-light); color: var(--coral); }
   .badge-purple { background: var(--purple-light); color: var(--purple); }
 
-  .empty {
-    text-align: center;
-    color: var(--text3);
-    font-size: 13px;
-    padding: 2rem 0;
-  }
+  .empty { text-align: center; color: var(--text3); font-size: 13px; padding: 2rem 0; }
 
+  /* メトリクス */
   .metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-bottom: 1.25rem; }
-  .metric {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 1rem;
-    text-align: center;
-  }
-  .metric-val { font-size: 24px; font-weight: 700; color: var(--accent); font-family: 'DM Serif Display', serif; }
+  .metric { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem; text-align: center; }
+  .metric-val { font-size: 26px; font-weight: 700; color: var(--accent); font-family: 'DM Serif Display', serif; }
   .metric-lbl { font-size: 11px; color: var(--text2); margin-top: 4px; }
 
-  .chart-wrap { position: relative; width: 100%; }
+  /* 通知バー */
+  .notice { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--accent-dark); background: var(--accent-light); border: 1px solid var(--accent-border); border-radius: var(--radius-sm); padding: 8px 12px; margin-bottom: 1rem; }
+  .notice-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
 
-  .save-notice {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 12px;
-    color: var(--green);
-    background: var(--green-light);
-    border: 1px solid #C5DFC9;
-    border-radius: var(--radius-sm);
-    padding: 8px 12px;
-    margin-bottom: 1rem;
-  }
-  .dot-green { width: 7px; height: 7px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
+  /* 犬なし状態 */
+  .no-dog { text-align: center; padding: 3rem 1rem; }
+  .no-dog-icon { font-size: 48px; margin-bottom: 1rem; }
+  .no-dog p { color: var(--text2); font-size: 14px; margin-bottom: 1.25rem; }
 
   @media (max-width: 480px) {
-    .tab { font-size: 11px; padding: 7px 6px; }
-    .logo span { display: none; }
+    .tab { font-size: 11px; padding: 7px 5px; }
+    .logo-sub { display: none; }
   }
 </style>
 </head>
 <body>
 
 <header>
-  <span class="paw">🐾</span>
-  <div class="logo">わんこ手帳<span>ブラウザに自動保存されます</span></div>
+  <div class="header-inner">
+    <span class="paw">🐾</span>
+    <div class="logo">わんこ手帳<span class="logo-sub">ブラウザに自動保存</span></div>
+  </div>
 </header>
+
+<!-- 犬追加モーダル -->
+<div class="modal-overlay" id="dogModal">
+  <div class="modal">
+    <h3>ワンちゃんを登録</h3>
+    <div class="modal-row"><label>名前</label><input type="text" id="dog-name-input" placeholder="例: ポチ" maxlength="20"></div>
+    <div class="modal-row"><label>犬種（任意）</label><input type="text" id="dog-breed-input" placeholder="例: トイプードル" maxlength="30"></div>
+    <div class="modal-row"><label>生年月日（任意）</label><input type="date" id="dog-birth-input"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeDogModal()">キャンセル</button>
+      <button class="btn btn-primary" onclick="saveDog()">登録する</button>
+    </div>
+  </div>
+</div>
 
 <div class="container">
 
-  <div class="save-notice">
-    <span class="dot-green"></span>
+  <div class="notice">
+    <span class="notice-dot"></span>
     データはこのブラウザに自動保存されます。同じブラウザを使う限りデータは消えません。
   </div>
 
-  <div class="tabs">
-    <button class="tab active" onclick="showTab('weight')">体重・食事</button>
-    <button class="tab" onclick="showTab('walk')">散歩・運動</button>
-    <button class="tab" onclick="showTab('medical')">ワクチン・病院</button>
-    <button class="tab" onclick="showTab('care')">ケア・体調</button>
-    <button class="tab" onclick="showTab('graph')">グラフ</button>
+  <!-- 犬選択 -->
+  <div class="dog-bar">
+    <span class="dog-bar-label">わんちゃん</span>
+    <div class="dog-chips" id="dog-chips"></div>
+    <button class="btn-add-dog" onclick="openDogModal()">＋ 追加</button>
   </div>
 
-  <!-- 体重・食事 -->
-  <div id="tab-weight" class="section active">
-    <div class="card">
-      <div class="card-title">体重・食事を記録</div>
-      <div class="form-row">
-        <div><label>日付</label><input type="date" id="w-date"></div>
-        <div><label>体重 (kg)</label><input type="number" id="w-weight" step="0.1" placeholder="例: 5.2"></div>
-        <div><label>食事の量</label>
-          <select id="w-food">
-            <option value="">選択してください</option>
-            <option>完食</option><option>多め</option><option>普通</option><option>少なめ</option><option>食べなかった</option>
-          </select>
-        </div>
-      </div>
-      <div style="margin-bottom:10px"><label>メモ</label><textarea id="w-note" placeholder="体調など自由に記入"></textarea></div>
-      <button class="btn btn-primary" onclick="addRecord('weight')">記録する</button>
-    </div>
-    <div id="records-weight"></div>
+  <!-- 犬未登録 -->
+  <div id="no-dog-view" class="no-dog" style="display:none">
+    <div class="no-dog-icon">🐶</div>
+    <p>まずはワンちゃんを登録してください</p>
+    <button class="btn btn-primary" onclick="openDogModal()">ワンちゃんを追加する</button>
   </div>
 
-  <!-- 散歩・運動 -->
-  <div id="tab-walk" class="section">
-    <div class="card">
-      <div class="card-title">散歩・運動を記録</div>
-      <div class="form-row">
-        <div><label>日付</label><input type="date" id="wk-date"></div>
-        <div><label>時間 (分)</label><input type="number" id="wk-min" placeholder="例: 30"></div>
-        <div><label>距離 (km)</label><input type="number" id="wk-km" step="0.1" placeholder="例: 1.5"></div>
-        <div><label>天気</label>
-          <select id="wk-weather">
-            <option value="">選択</option><option>晴れ</option><option>曇り</option><option>雨</option>
-          </select>
-        </div>
-      </div>
-      <div style="margin-bottom:10px"><label>メモ</label><textarea id="wk-note" placeholder="コース・様子など"></textarea></div>
-      <button class="btn btn-primary" onclick="addRecord('walk')">記録する</button>
-    </div>
-    <div id="records-walk"></div>
-  </div>
+  <!-- メインコンテンツ -->
+  <div id="main-content" style="display:none">
 
-  <!-- ワクチン・病院 -->
-  <div id="tab-medical" class="section">
-    <div class="card">
-      <div class="card-title">ワクチン・病院を記録</div>
-      <div class="form-row">
-        <div><label>日付</label><input type="date" id="m-date"></div>
-        <div><label>種類</label>
-          <select id="m-type">
-            <option value="">選択してください</option>
-            <option>ワクチン接種</option><option>病院（定期）</option><option>病院（急患）</option>
-            <option>フィラリア予防</option><option>ノミ・ダニ予防</option><option>その他</option>
-          </select>
-        </div>
-        <div><label>次回予定日</label><input type="date" id="m-next"></div>
-      </div>
-      <div style="margin-bottom:10px"><label>メモ（内容・費用など）</label><textarea id="m-note" placeholder="例: 混合ワクチン 3,500円"></textarea></div>
-      <button class="btn btn-primary" onclick="addRecord('medical')">記録する</button>
+    <!-- 犬プロフィール -->
+    <div class="card" id="dog-profile-card" style="margin-bottom:1.25rem">
+      <div id="dog-profile-content"></div>
     </div>
-    <div id="records-medical"></div>
-  </div>
 
-  <!-- ケア・体調 -->
-  <div id="tab-care" class="section">
-    <div class="card">
-      <div class="card-title">ケア・体調を記録</div>
-      <div class="form-row">
-        <div><label>日付</label><input type="date" id="c-date"></div>
-        <div><label>ケアの種類</label>
-          <select id="c-type">
-            <option value="">選択</option><option>お風呂</option><option>ブラッシング</option>
-            <option>爪切り</option><option>耳掃除</option><option>歯磨き</option>
-          </select>
-        </div>
-        <div><label>体調</label>
-          <select id="c-cond">
-            <option value="">選択</option><option>良好</option><option>普通</option><option>やや不調</option><option>不調</option>
-          </select>
-        </div>
-        <div><label>便の状態</label>
-          <select id="c-poop">
-            <option value="">選択</option><option>正常</option><option>やや軟らかい</option>
-            <option>下痢</option><option>硬い</option><option>血便</option>
-          </select>
-        </div>
-      </div>
-      <div style="margin-bottom:10px"><label>メモ</label><textarea id="c-note" placeholder="気になる症状など"></textarea></div>
-      <button class="btn btn-primary" onclick="addRecord('care')">記録する</button>
+    <div class="tabs">
+      <button class="tab active" onclick="showTab('weight')">体重・食事</button>
+      <button class="tab" onclick="showTab('walk')">散歩・運動</button>
+      <button class="tab" onclick="showTab('medical')">ワクチン・病院</button>
+      <button class="tab" onclick="showTab('care')">ケア・体調</button>
+      <button class="tab" onclick="showTab('graph')">グラフ</button>
     </div>
-    <div id="records-care"></div>
-  </div>
 
-  <!-- グラフ -->
-  <div id="tab-graph" class="section">
-    <div class="metric-grid" id="graph-summary"></div>
-    <div class="card">
-      <div class="card-title">体重の推移</div>
-      <div class="chart-wrap" style="height:240px">
-        <canvas id="weightChart" role="img" aria-label="体重推移グラフ">体重の記録データ</canvas>
+    <!-- 体重・食事 -->
+    <div id="tab-weight" class="section active">
+      <div class="card">
+        <div class="card-title">体重・食事を記録</div>
+        <div class="form-row">
+          <div><label>日付</label><input type="date" id="w-date"></div>
+          <div><label>体重 (kg)</label><input type="number" id="w-weight" step="0.1" placeholder="例: 5.2"></div>
+          <div><label>食事の量</label>
+            <select id="w-food"><option value="">選択</option><option>完食</option><option>多め</option><option>普通</option><option>少なめ</option><option>食べなかった</option></select>
+          </div>
+        </div>
+        <div style="margin-bottom:10px"><label>メモ</label><textarea id="w-note" placeholder="体調など自由に記入"></textarea></div>
+        <button class="btn btn-primary" onclick="addRecord('weight')">記録する</button>
       </div>
+      <div id="records-weight"></div>
     </div>
-    <div class="card">
-      <div class="card-title">散歩時間の推移</div>
-      <div class="chart-wrap" style="height:200px">
-        <canvas id="walkChart" role="img" aria-label="散歩時間推移グラフ">散歩時間の記録データ</canvas>
-      </div>
-    </div>
-  </div>
 
+    <!-- 散歩・運動 -->
+    <div id="tab-walk" class="section">
+      <div class="card">
+        <div class="card-title">散歩・運動を記録</div>
+        <div class="form-row">
+          <div><label>日付</label><input type="date" id="wk-date"></div>
+          <div><label>時間 (分)</label><input type="number" id="wk-min" placeholder="例: 30"></div>
+          <div><label>距離 (km)</label><input type="number" id="wk-km" step="0.1" placeholder="例: 1.5"></div>
+          <div><label>天気</label><select id="wk-weather"><option value="">選択</option><option>晴れ</option><option>曇り</option><option>雨</option></select></div>
+        </div>
+        <div style="margin-bottom:10px"><label>メモ</label><textarea id="wk-note" placeholder="コース・様子など"></textarea></div>
+        <button class="btn btn-primary" onclick="addRecord('walk')">記録する</button>
+      </div>
+      <div id="records-walk"></div>
+    </div>
+
+    <!-- ワクチン・病院 -->
+    <div id="tab-medical" class="section">
+      <div class="card">
+        <div class="card-title">ワクチン・病院を記録</div>
+        <div class="form-row">
+          <div><label>日付</label><input type="date" id="m-date"></div>
+          <div><label>種類</label>
+            <select id="m-type"><option value="">選択</option><option>ワクチン接種</option><option>病院（定期）</option><option>病院（急患）</option><option>フィラリア予防</option><option>ノミ・ダニ予防</option><option>その他</option></select>
+          </div>
+          <div><label>次回予定日</label><input type="date" id="m-next"></div>
+        </div>
+        <div style="margin-bottom:10px"><label>メモ（内容・費用など）</label><textarea id="m-note" placeholder="例: 混合ワクチン 3,500円"></textarea></div>
+        <button class="btn btn-primary" onclick="addRecord('medical')">記録する</button>
+      </div>
+      <div id="records-medical"></div>
+    </div>
+
+    <!-- ケア・体調 -->
+    <div id="tab-care" class="section">
+      <div class="card">
+        <div class="card-title">ケア・体調を記録</div>
+        <div class="form-row">
+          <div><label>日付</label><input type="date" id="c-date"></div>
+          <div><label>ケアの種類</label>
+            <select id="c-type"><option value="">選択</option><option>お風呂</option><option>ブラッシング</option><option>爪切り</option><option>耳掃除</option><option>歯磨き</option></select>
+          </div>
+          <div><label>体調</label>
+            <select id="c-cond"><option value="">選択</option><option>良好</option><option>普通</option><option>やや不調</option><option>不調</option></select>
+          </div>
+          <div><label>便の状態</label>
+            <select id="c-poop"><option value="">選択</option><option>正常</option><option>やや軟らかい</option><option>下痢</option><option>硬い</option><option>血便</option></select>
+          </div>
+        </div>
+        <div style="margin-bottom:10px"><label>メモ</label><textarea id="c-note" placeholder="気になる症状など"></textarea></div>
+        <button class="btn btn-primary" onclick="addRecord('care')">記録する</button>
+      </div>
+      <div id="records-care"></div>
+    </div>
+
+    <!-- グラフ -->
+    <div id="tab-graph" class="section">
+      <div class="metric-grid" id="graph-summary"></div>
+      <div class="card">
+        <div class="card-title">体重の推移</div>
+        <div style="position:relative;width:100%;height:240px"><canvas id="weightChart" role="img" aria-label="体重推移グラフ">体重の記録データ</canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title">散歩時間の推移</div>
+        <div style="position:relative;width:100%;height:200px"><canvas id="walkChart" role="img" aria-label="散歩時間推移グラフ">散歩時間の記録データ</canvas></div>
+      </div>
+    </div>
+
+  </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
-const STORAGE_KEY = 'dogHealth_v1';
-let data = {weight:[], walk:[], medical:[], care:[]};
+const STORAGE_KEY = 'dogHealth_v2';
+let store = { dogs: [], records: {} };
+let currentDogId = null;
 let wChart, wkChart;
 
-function load() {
-  try {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) data = JSON.parse(saved);
-  } catch(e) {}
+function loadStore() {
+  try { const s = localStorage.getItem(STORAGE_KEY); if (s) store = JSON.parse(s); } catch(e) {}
 }
-function save() {
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch(e) {}
+function saveStore() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(store)); } catch(e) {}
 }
 
+function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2,6); }
 function today() { return new Date().toISOString().slice(0,10); }
-['w-date','wk-date','m-date','c-date'].forEach(id => {
-  const el = document.getElementById(id);
-  if (el) el.value = today();
-});
+
+function openDogModal() { document.getElementById('dogModal').classList.add('open'); document.getElementById('dog-name-input').focus(); }
+function closeDogModal() {
+  document.getElementById('dogModal').classList.remove('open');
+  document.getElementById('dog-name-input').value = '';
+  document.getElementById('dog-breed-input').value = '';
+  document.getElementById('dog-birth-input').value = '';
+}
+
+function saveDog() {
+  const name = document.getElementById('dog-name-input').value.trim();
+  if (!name) return alert('名前を入力してください');
+  const breed = document.getElementById('dog-breed-input').value.trim();
+  const birth = document.getElementById('dog-birth-input').value;
+  const dog = { id: uid(), name, breed, birth };
+  store.dogs.push(dog);
+  store.records[dog.id] = { weight:[], walk:[], medical:[], care:[] };
+  saveStore();
+  closeDogModal();
+  renderDogChips();
+  selectDog(dog.id);
+}
+
+function deleteDog(id, e) {
+  e.stopPropagation();
+  const dog = store.dogs.find(d => d.id === id);
+  if (!confirm(`「${dog.name}」を削除しますか？\n記録もすべて削除されます。`)) return;
+  store.dogs = store.dogs.filter(d => d.id !== id);
+  delete store.records[id];
+  saveStore();
+  renderDogChips();
+  if (currentDogId === id) {
+    currentDogId = store.dogs.length ? store.dogs[0].id : null;
+    if (currentDogId) selectDog(currentDogId); else showNoDog();
+  }
+}
+
+function renderDogChips() {
+  const el = document.getElementById('dog-chips');
+  el.innerHTML = store.dogs.map(d => `
+    <button class="dog-chip ${d.id === currentDogId ? 'active' : ''}" onclick="selectDog('${d.id}')">
+      🐶 ${d.name}
+      <span class="chip-del" onclick="deleteDog('${d.id}', event)">×</span>
+    </button>
+  `).join('');
+}
+
+function selectDog(id) {
+  currentDogId = id;
+  renderDogChips();
+  showMainContent();
+  renderProfile();
+  ['weight','walk','medical','care'].forEach(renderRecords);
+  setDateDefaults();
+}
+
+function showNoDog() {
+  document.getElementById('no-dog-view').style.display = 'block';
+  document.getElementById('main-content').style.display = 'none';
+}
+
+function showMainContent() {
+  document.getElementById('no-dog-view').style.display = 'none';
+  document.getElementById('main-content').style.display = 'block';
+}
+
+function renderProfile() {
+  const dog = store.dogs.find(d => d.id === currentDogId);
+  if (!dog) return;
+  let age = '';
+  if (dog.birth) {
+    const b = new Date(dog.birth);
+    const now = new Date();
+    let y = now.getFullYear() - b.getFullYear();
+    let m = now.getMonth() - b.getMonth();
+    if (m < 0) { y--; m += 12; }
+    age = y > 0 ? `${y}歳${m}ヶ月` : `${m}ヶ月`;
+  }
+  document.getElementById('dog-profile-content').innerHTML = `
+    <div style="display:flex;align-items:center;gap:14px">
+      <div style="width:48px;height:48px;border-radius:50%;background:var(--accent-light);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0">🐶</div>
+      <div>
+        <div style="font-size:18px;font-weight:700;color:var(--text)">${dog.name}</div>
+        <div style="font-size:13px;color:var(--text2);margin-top:2px">${[dog.breed, age].filter(Boolean).join('・') || '登録情報なし'}</div>
+      </div>
+    </div>
+  `;
+}
+
+function setDateDefaults() {
+  ['w-date','wk-date','m-date','c-date'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.value = today();
+  });
+}
 
 function showTab(name) {
   const names = ['weight','walk','medical','care','graph'];
@@ -384,87 +460,65 @@ function showTab(name) {
   if (name === 'graph') renderGraphs();
 }
 
+function getRecords() { return store.records[currentDogId] || {weight:[],walk:[],medical:[],care:[]}; }
+
 function addRecord(type) {
+  if (!currentDogId) return;
   let record = {};
   if (type === 'weight') {
-    const d = document.getElementById('w-date').value;
-    const w = document.getElementById('w-weight').value;
-    const f = document.getElementById('w-food').value;
-    const n = document.getElementById('w-note').value;
+    const d=document.getElementById('w-date').value, w=document.getElementById('w-weight').value, f=document.getElementById('w-food').value, n=document.getElementById('w-note').value;
     if (!d) return alert('日付を入力してください');
-    record = { date: d, weight: w ? parseFloat(w) : null, food: f, note: n };
-    document.getElementById('w-weight').value = '';
-    document.getElementById('w-food').value = '';
-    document.getElementById('w-note').value = '';
+    record = { date:d, weight: w ? parseFloat(w) : null, food:f, note:n };
+    document.getElementById('w-weight').value = ''; document.getElementById('w-food').value = ''; document.getElementById('w-note').value = '';
   } else if (type === 'walk') {
-    const d = document.getElementById('wk-date').value;
-    const m = document.getElementById('wk-min').value;
-    const k = document.getElementById('wk-km').value;
-    const w = document.getElementById('wk-weather').value;
-    const n = document.getElementById('wk-note').value;
+    const d=document.getElementById('wk-date').value, m=document.getElementById('wk-min').value, k=document.getElementById('wk-km').value, w=document.getElementById('wk-weather').value, n=document.getElementById('wk-note').value;
     if (!d) return alert('日付を入力してください');
-    record = { date: d, minutes: m ? parseInt(m) : null, km: k ? parseFloat(k) : null, weather: w, note: n };
-    document.getElementById('wk-min').value = '';
-    document.getElementById('wk-km').value = '';
-    document.getElementById('wk-note').value = '';
+    record = { date:d, minutes: m ? parseInt(m) : null, km: k ? parseFloat(k) : null, weather:w, note:n };
+    document.getElementById('wk-min').value = ''; document.getElementById('wk-km').value = ''; document.getElementById('wk-note').value = '';
   } else if (type === 'medical') {
-    const d = document.getElementById('m-date').value;
-    const t = document.getElementById('m-type').value;
-    const nx = document.getElementById('m-next').value;
-    const n = document.getElementById('m-note').value;
+    const d=document.getElementById('m-date').value, t=document.getElementById('m-type').value, nx=document.getElementById('m-next').value, n=document.getElementById('m-note').value;
     if (!d) return alert('日付を入力してください');
-    record = { date: d, type: t, next: nx, note: n };
-    document.getElementById('m-type').value = '';
-    document.getElementById('m-next').value = '';
-    document.getElementById('m-note').value = '';
+    record = { date:d, type:t, next:nx, note:n };
+    document.getElementById('m-type').value = ''; document.getElementById('m-next').value = ''; document.getElementById('m-note').value = '';
   } else if (type === 'care') {
-    const d = document.getElementById('c-date').value;
-    const t = document.getElementById('c-type').value;
-    const co = document.getElementById('c-cond').value;
-    const p = document.getElementById('c-poop').value;
-    const n = document.getElementById('c-note').value;
+    const d=document.getElementById('c-date').value, t=document.getElementById('c-type').value, co=document.getElementById('c-cond').value, p=document.getElementById('c-poop').value, n=document.getElementById('c-note').value;
     if (!d) return alert('日付を入力してください');
-    record = { date: d, type: t, condition: co, poop: p, note: n };
-    document.getElementById('c-type').value = '';
-    document.getElementById('c-cond').value = '';
-    document.getElementById('c-poop').value = '';
-    document.getElementById('c-note').value = '';
+    record = { date:d, type:t, condition:co, poop:p, note:n };
+    document.getElementById('c-type').value = ''; document.getElementById('c-cond').value = ''; document.getElementById('c-poop').value = ''; document.getElementById('c-note').value = '';
   }
-  data[type].unshift(record);
-  save();
+  if (!store.records[currentDogId]) store.records[currentDogId] = {weight:[],walk:[],medical:[],care:[]};
+  store.records[currentDogId][type].unshift(record);
+  saveStore();
   renderRecords(type);
 }
 
 function deleteRecord(type, idx) {
   if (!confirm('この記録を削除しますか？')) return;
-  data[type].splice(idx, 1);
-  save();
+  store.records[currentDogId][type].splice(idx, 1);
+  saveStore();
   renderRecords(type);
 }
 
-const dotColors = { weight: '#3A6FA8', walk: '#4A7C59', medical: '#C17C3A', care: '#6B4FA8' };
+const dotColors = { weight:'#2A8FBF', walk:'#2E8B5A', medical:'#C07820', care:'#6B4FA8' };
 
 function renderRecords(type) {
   const el = document.getElementById('records-' + type);
   if (!el) return;
-  if (data[type].length === 0) { el.innerHTML = '<p class="empty">まだ記録がありません</p>'; return; }
-  el.innerHTML = data[type].map((r, i) => {
+  const recs = getRecords()[type] || [];
+  if (recs.length === 0) { el.innerHTML = '<p class="empty">まだ記録がありません</p>'; return; }
+  el.innerHTML = recs.map((r, i) => {
     let main = '', badge = '', badgeClass = '';
     if (type === 'weight') {
-      badge = r.weight ? r.weight + 'kg' : '';
-      badgeClass = 'badge-blue';
+      badge = r.weight ? r.weight + 'kg' : ''; badgeClass = 'badge-blue';
       main = [r.weight ? r.weight + 'kg' : '', r.food].filter(Boolean).join(' / ');
     } else if (type === 'walk') {
-      badge = r.minutes ? r.minutes + '分' : '';
-      badgeClass = 'badge-green';
+      badge = r.minutes ? r.minutes + '分' : ''; badgeClass = 'badge-green';
       main = [r.minutes ? r.minutes + '分' : '', r.km ? r.km + 'km' : '', r.weather].filter(Boolean).join(' / ');
     } else if (type === 'medical') {
-      badge = r.type;
-      badgeClass = 'badge-amber';
+      badge = r.type; badgeClass = 'badge-amber';
       main = r.type + (r.next ? ' → 次回: ' + r.next : '');
     } else if (type === 'care') {
-      badge = r.type || r.condition;
-      badgeClass = 'badge-purple';
+      badge = r.type || r.condition; badgeClass = 'badge-purple';
       main = [r.type, r.condition ? '体調: ' + r.condition : '', r.poop ? '便: ' + r.poop : ''].filter(Boolean).join(' / ');
     }
     return `<div class="record-item">
@@ -474,60 +528,46 @@ function renderRecords(type) {
         ${r.note ? `<div class="record-note">${r.note}</div>` : ''}
       </div>
       <span class="record-date">${r.date}</span>
-      <button class="del-btn" onclick="deleteRecord('${type}',${i})" title="削除">×</button>
+      <button class="del-btn" onclick="deleteRecord('${type}',${i})">×</button>
     </div>`;
   }).join('');
 }
 
 function renderGraphs() {
-  const wRecs = [...data.weight].filter(r => r.weight).sort((a,b) => a.date.localeCompare(b.date));
-  const wkRecs = [...data.walk].filter(r => r.minutes).sort((a,b) => a.date.localeCompare(b.date));
+  const recs = getRecords();
+  const wRecs = [...(recs.weight||[])].filter(r => r.weight).sort((a,b) => a.date.localeCompare(b.date));
+  const wkRecs = [...(recs.walk||[])].filter(r => r.minutes).sort((a,b) => a.date.localeCompare(b.date));
 
   document.getElementById('graph-summary').innerHTML = `
-    <div class="metric"><div class="metric-val">${data.weight.length}</div><div class="metric-lbl">体重・食事の記録</div></div>
-    <div class="metric"><div class="metric-val">${data.walk.length}</div><div class="metric-lbl">散歩の記録</div></div>
-    <div class="metric"><div class="metric-val">${data.medical.length}</div><div class="metric-lbl">医療の記録</div></div>
-    <div class="metric"><div class="metric-val">${data.care.length}</div><div class="metric-lbl">ケアの記録</div></div>
+    <div class="metric"><div class="metric-val">${(recs.weight||[]).length}</div><div class="metric-lbl">体重・食事</div></div>
+    <div class="metric"><div class="metric-val">${(recs.walk||[]).length}</div><div class="metric-lbl">散歩</div></div>
+    <div class="metric"><div class="metric-val">${(recs.medical||[]).length}</div><div class="metric-lbl">医療</div></div>
+    <div class="metric"><div class="metric-val">${(recs.care||[]).length}</div><div class="metric-lbl">ケア</div></div>
   `;
 
   if (wChart) wChart.destroy();
   wChart = new Chart(document.getElementById('weightChart'), {
     type: 'line',
-    data: {
-      labels: wRecs.map(r => r.date.slice(5)),
-      datasets: [{
-        label: '体重(kg)', data: wRecs.map(r => r.weight),
-        borderColor: '#3A6FA8', backgroundColor: 'rgba(58,111,168,0.08)',
-        tension: 0.3, pointRadius: 5, fill: true, borderWidth: 2
-      }]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: false } },
-      scales: { y: { ticks: { callback: v => v + 'kg' } }, x: { ticks: { autoSkip: true, maxTicksLimit: 8 } } }
-    }
+    data: { labels: wRecs.map(r => r.date.slice(5)), datasets: [{ label:'体重(kg)', data: wRecs.map(r => r.weight), borderColor:'#2A8FBF', backgroundColor:'rgba(42,143,191,0.08)', tension:0.3, pointRadius:5, fill:true, borderWidth:2 }] },
+    options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{ y:{ticks:{callback:v=>v+'kg'}}, x:{ticks:{autoSkip:true,maxTicksLimit:8}} } }
   });
 
   if (wkChart) wkChart.destroy();
   wkChart = new Chart(document.getElementById('walkChart'), {
     type: 'bar',
-    data: {
-      labels: wkRecs.map(r => r.date.slice(5)),
-      datasets: [{
-        label: '散歩時間(分)', data: wkRecs.map(r => r.minutes),
-        backgroundColor: 'rgba(74,124,89,0.75)', borderRadius: 5
-      }]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: false } },
-      scales: { y: { ticks: { callback: v => v + '分' } }, x: { ticks: { autoSkip: true, maxTicksLimit: 8 } } }
-    }
+    data: { labels: wkRecs.map(r => r.date.slice(5)), datasets: [{ label:'散歩時間(分)', data: wkRecs.map(r => r.minutes), backgroundColor:'rgba(42,143,191,0.65)', borderRadius:5 }] },
+    options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{ y:{ticks:{callback:v=>v+'分'}}, x:{ticks:{autoSkip:true,maxTicksLimit:8}} } }
   });
 }
 
-load();
-['weight','walk','medical','care'].forEach(renderRecords);
+// 初期化
+loadStore();
+renderDogChips();
+if (store.dogs.length > 0) { selectDog(store.dogs[0].id); }
+else { showNoDog(); }
+
+// Enterキーでモーダル確定
+document.getElementById('dog-name-input').addEventListener('keydown', e => { if (e.key === 'Enter') saveDog(); });
 </script>
 </body>
 </html>
