@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>愛犬の健康管理</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F7F4EF;
+    --surface: #FFFFFF;
+    --surface2: #F0EDE6;
+    --border: #E2DDD5;
+    --text: #2C2416;
+    --text2: #7A6E60;
+    --text3: #B0A898;
+    --accent: #C17C3A;
+    --accent-light: #FBF0E3;
+    --accent-border: #E8C49A;
+    --green: #4A7C59;
+    --green-light: #EAF2EC;
+    --blue: #3A6FA8;
+    --blue-light: #E8EFF8;
+    --red: #B34A4A;
+    --red-light: #F8EAEA;
+    --purple: #6B4FA8;
+    --purple-light: #F0EAFB;
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    color: var(--accent);
+    letter-spacing: -0.5px;
+  }
+  .logo span { color: var(--text); font-size: 14px; font-family: 'Noto Sans JP', sans-serif; font-weight: 400; margin-left: 8px; color: var(--text2); }
+  .paw { font-size: 20px; }
+
+  .container { max-width: 720px; margin: 0 auto; padding: 1.5rem 1rem 4rem; }
+
+  .tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 1.5rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 4px;
+    flex-wrap: wrap;
+  }
+  .tab {
+    flex: 1;
+    min-width: 80px;
+    padding: 8px 10px;
+    border: none;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--text2);
+    cursor: pointer;
+    font-size: 13px;
+    font-family: inherit;
+    font-weight: 500;
+    transition: all 0.15s;
+    text-align: center;
+  }
+  .tab:hover { background: var(--surface2); color: var(--text); }
+  .tab.active { background: var(--accent); color: #fff; }
+
+  .section { display: none; }
+  .section.active { display: block; }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+  }
+  .card-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text2);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 1rem;
+  }
+
+  .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 10px; }
+  label { font-size: 12px; color: var(--text2); font-weight: 500; display: block; margin-bottom: 4px; }
+  input, select, textarea {
+    width: 100%;
+    padding: 9px 11px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+    color: var(--text);
+    font-family: inherit;
+    font-size: 14px;
+    transition: border-color 0.15s;
+    -webkit-appearance: none;
+  }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent); background: var(--surface); }
+  textarea { height: 72px; resize: vertical; }
+  select { cursor: pointer; }
+
+  .btn {
+    padding: 9px 20px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn:hover { background: var(--surface2); }
+  .btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .btn-primary:hover { background: #A8692A; border-color: #A8692A; }
+  .btn-sm { padding: 5px 12px; font-size: 12px; }
+
+  .records { }
+  .record-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .record-item:last-child { border-bottom: none; }
+  .record-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    margin-top: 6px;
+    flex-shrink: 0;
+  }
+  .record-body { flex: 1; min-width: 0; }
+  .record-main { font-size: 14px; color: var(--text); }
+  .record-note { font-size: 12px; color: var(--text2); margin-top: 3px; }
+  .record-date { font-size: 12px; color: var(--text3); white-space: nowrap; }
+  .del-btn {
+    background: none; border: none; cursor: pointer;
+    color: var(--text3); font-size: 16px; padding: 2px 6px;
+    border-radius: 4px; line-height: 1;
+  }
+  .del-btn:hover { color: var(--red); background: var(--red-light); }
+
+  .badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 20px;
+    margin-right: 5px;
+    vertical-align: middle;
+  }
+  .badge-green { background: var(--green-light); color: var(--green); }
+  .badge-blue { background: var(--blue-light); color: var(--blue); }
+  .badge-amber { background: var(--accent-light); color: var(--accent); }
+  .badge-red { background: var(--red-light); color: var(--red); }
+  .badge-purple { background: var(--purple-light); color: var(--purple); }
+
+  .empty {
+    text-align: center;
+    color: var(--text3);
+    font-size: 13px;
+    padding: 2rem 0;
+  }
+
+  .metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-bottom: 1.25rem; }
+  .metric {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1rem;
+    text-align: center;
+  }
+  .metric-val { font-size: 24px; font-weight: 700; color: var(--accent); font-family: 'DM Serif Display', serif; }
+  .metric-lbl { font-size: 11px; color: var(--text2); margin-top: 4px; }
+
+  .chart-wrap { position: relative; width: 100%; }
+
+  .save-notice {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--green);
+    background: var(--green-light);
+    border: 1px solid #C5DFC9;
+    border-radius: var(--radius-sm);
+    padding: 8px 12px;
+    margin-bottom: 1rem;
+  }
+  .dot-green { width: 7px; height: 7px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
+
+  @media (max-width: 480px) {
+    .tab { font-size: 11px; padding: 7px 6px; }
+    .logo span { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <span class="paw">🐾</span>
+  <div class="logo">わんこ手帳<span>ブラウザに自動保存されます</span></div>
+</header>
+
+<div class="container">
+
+  <div class="save-notice">
+    <span class="dot-green"></span>
+    データはこのブラウザに自動保存されます。同じブラウザを使う限りデータは消えません。
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('weight')">体重・食事</button>
+    <button class="tab" onclick="showTab('walk')">散歩・運動</button>
+    <button class="tab" onclick="showTab('medical')">ワクチン・病院</button>
+    <button class="tab" onclick="showTab('care')">ケア・体調</button>
+    <button class="tab" onclick="showTab('graph')">グラフ</button>
+  </div>
+
+  <!-- 体重・食事 -->
+  <div id="tab-weight" class="section active">
+    <div class="card">
+      <div class="card-title">体重・食事を記録</div>
+      <div class="form-row">
+        <div><label>日付</label><input type="date" id="w-date"></div>
+        <div><label>体重 (kg)</label><input type="number" id="w-weight" step="0.1" placeholder="例: 5.2"></div>
+        <div><label>食事の量</label>
+          <select id="w-food">
+            <option value="">選択してください</option>
+            <option>完食</option><option>多め</option><option>普通</option><option>少なめ</option><option>食べなかった</option>
+          </select>
+        </div>
+      </div>
+      <div style="margin-bottom:10px"><label>メモ</label><textarea id="w-note" placeholder="体調など自由に記入"></textarea></div>
+      <button class="btn btn-primary" onclick="addRecord('weight')">記録する</button>
+    </div>
+    <div id="records-weight"></div>
+  </div>
+
+  <!-- 散歩・運動 -->
+  <div id="tab-walk" class="section">
+    <div class="card">
+      <div class="card-title">散歩・運動を記録</div>
+      <div class="form-row">
+        <div><label>日付</label><input type="date" id="wk-date"></div>
+        <div><label>時間 (分)</label><input type="number" id="wk-min" placeholder="例: 30"></div>
+        <div><label>距離 (km)</label><input type="number" id="wk-km" step="0.1" placeholder="例: 1.5"></div>
+        <div><label>天気</label>
+          <select id="wk-weather">
+            <option value="">選択</option><option>晴れ</option><option>曇り</option><option>雨</option>
+          </select>
+        </div>
+      </div>
+      <div style="margin-bottom:10px"><label>メモ</label><textarea id="wk-note" placeholder="コース・様子など"></textarea></div>
+      <button class="btn btn-primary" onclick="addRecord('walk')">記録する</button>
+    </div>
+    <div id="records-walk"></div>
+  </div>
+
+  <!-- ワクチン・病院 -->
+  <div id="tab-medical" class="section">
+    <div class="card">
+      <div class="card-title">ワクチン・病院を記録</div>
+      <div class="form-row">
+        <div><label>日付</label><input type="date" id="m-date"></div>
+        <div><label>種類</label>
+          <select id="m-type">
+            <option value="">選択してください</option>
+            <option>ワクチン接種</option><option>病院（定期）</option><option>病院（急患）</option>
+            <option>フィラリア予防</option><option>ノミ・ダニ予防</option><option>その他</option>
+          </select>
+        </div>
+        <div><label>次回予定日</label><input type="date" id="m-next"></div>
+      </div>
+      <div style="margin-bottom:10px"><label>メモ（内容・費用など）</label><textarea id="m-note" placeholder="例: 混合ワクチン 3,500円"></textarea></div>
+      <button class="btn btn-primary" onclick="addRecord('medical')">記録する</button>
+    </div>
+    <div id="records-medical"></div>
+  </div>
+
+  <!-- ケア・体調 -->
+  <div id="tab-care" class="section">
+    <div class="card">
+      <div class="card-title">ケア・体調を記録</div>
+      <div class="form-row">
+        <div><label>日付</label><input type="date" id="c-date"></div>
+        <div><label>ケアの種類</label>
+          <select id="c-type">
+            <option value="">選択</option><option>お風呂</option><option>ブラッシング</option>
+            <option>爪切り</option><option>耳掃除</option><option>歯磨き</option>
+          </select>
+        </div>
+        <div><label>体調</label>
+          <select id="c-cond">
+            <option value="">選択</option><option>良好</option><option>普通</option><option>やや不調</option><option>不調</option>
+          </select>
+        </div>
+        <div><label>便の状態</label>
+          <select id="c-poop">
+            <option value="">選択</option><option>正常</option><option>やや軟らかい</option>
+            <option>下痢</option><option>硬い</option><option>血便</option>
+          </select>
+        </div>
+      </div>
+      <div style="margin-bottom:10px"><label>メモ</label><textarea id="c-note" placeholder="気になる症状など"></textarea></div>
+      <button class="btn btn-primary" onclick="addRecord('care')">記録する</button>
+    </div>
+    <div id="records-care"></div>
+  </div>
+
+  <!-- グラフ -->
+  <div id="tab-graph" class="section">
+    <div class="metric-grid" id="graph-summary"></div>
+    <div class="card">
+      <div class="card-title">体重の推移</div>
+      <div class="chart-wrap" style="height:240px">
+        <canvas id="weightChart" role="img" aria-label="体重推移グラフ">体重の記録データ</canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">散歩時間の推移</div>
+      <div class="chart-wrap" style="height:200px">
+        <canvas id="walkChart" role="img" aria-label="散歩時間推移グラフ">散歩時間の記録データ</canvas>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const STORAGE_KEY = 'dogHealth_v1';
+let data = {weight:[], walk:[], medical:[], care:[]};
+let wChart, wkChart;
+
+function load() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) data = JSON.parse(saved);
+  } catch(e) {}
+}
+function save() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch(e) {}
+}
+
+function today() { return new Date().toISOString().slice(0,10); }
+['w-date','wk-date','m-date','c-date'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) el.value = today();
+});
+
+function showTab(name) {
+  const names = ['weight','walk','medical','care','graph'];
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', names[i] === name));
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  if (name === 'graph') renderGraphs();
+}
+
+function addRecord(type) {
+  let record = {};
+  if (type === 'weight') {
+    const d = document.getElementById('w-date').value;
+    const w = document.getElementById('w-weight').value;
+    const f = document.getElementById('w-food').value;
+    const n = document.getElementById('w-note').value;
+    if (!d) return alert('日付を入力してください');
+    record = { date: d, weight: w ? parseFloat(w) : null, food: f, note: n };
+    document.getElementById('w-weight').value = '';
+    document.getElementById('w-food').value = '';
+    document.getElementById('w-note').value = '';
+  } else if (type === 'walk') {
+    const d = document.getElementById('wk-date').value;
+    const m = document.getElementById('wk-min').value;
+    const k = document.getElementById('wk-km').value;
+    const w = document.getElementById('wk-weather').value;
+    const n = document.getElementById('wk-note').value;
+    if (!d) return alert('日付を入力してください');
+    record = { date: d, minutes: m ? parseInt(m) : null, km: k ? parseFloat(k) : null, weather: w, note: n };
+    document.getElementById('wk-min').value = '';
+    document.getElementById('wk-km').value = '';
+    document.getElementById('wk-note').value = '';
+  } else if (type === 'medical') {
+    const d = document.getElementById('m-date').value;
+    const t = document.getElementById('m-type').value;
+    const nx = document.getElementById('m-next').value;
+    const n = document.getElementById('m-note').value;
+    if (!d) return alert('日付を入力してください');
+    record = { date: d, type: t, next: nx, note: n };
+    document.getElementById('m-type').value = '';
+    document.getElementById('m-next').value = '';
+    document.getElementById('m-note').value = '';
+  } else if (type === 'care') {
+    const d = document.getElementById('c-date').value;
+    const t = document.getElementById('c-type').value;
+    const co = document.getElementById('c-cond').value;
+    const p = document.getElementById('c-poop').value;
+    const n = document.getElementById('c-note').value;
+    if (!d) return alert('日付を入力してください');
+    record = { date: d, type: t, condition: co, poop: p, note: n };
+    document.getElementById('c-type').value = '';
+    document.getElementById('c-cond').value = '';
+    document.getElementById('c-poop').value = '';
+    document.getElementById('c-note').value = '';
+  }
+  data[type].unshift(record);
+  save();
+  renderRecords(type);
+}
+
+function deleteRecord(type, idx) {
+  if (!confirm('この記録を削除しますか？')) return;
+  data[type].splice(idx, 1);
+  save();
+  renderRecords(type);
+}
+
+const dotColors = { weight: '#3A6FA8', walk: '#4A7C59', medical: '#C17C3A', care: '#6B4FA8' };
+
+function renderRecords(type) {
+  const el = document.getElementById('records-' + type);
+  if (!el) return;
+  if (data[type].length === 0) { el.innerHTML = '<p class="empty">まだ記録がありません</p>'; return; }
+  el.innerHTML = data[type].map((r, i) => {
+    let main = '', badge = '', badgeClass = '';
+    if (type === 'weight') {
+      badge = r.weight ? r.weight + 'kg' : '';
+      badgeClass = 'badge-blue';
+      main = [r.weight ? r.weight + 'kg' : '', r.food].filter(Boolean).join(' / ');
+    } else if (type === 'walk') {
+      badge = r.minutes ? r.minutes + '分' : '';
+      badgeClass = 'badge-green';
+      main = [r.minutes ? r.minutes + '分' : '', r.km ? r.km + 'km' : '', r.weather].filter(Boolean).join(' / ');
+    } else if (type === 'medical') {
+      badge = r.type;
+      badgeClass = 'badge-amber';
+      main = r.type + (r.next ? ' → 次回: ' + r.next : '');
+    } else if (type === 'care') {
+      badge = r.type || r.condition;
+      badgeClass = 'badge-purple';
+      main = [r.type, r.condition ? '体調: ' + r.condition : '', r.poop ? '便: ' + r.poop : ''].filter(Boolean).join(' / ');
+    }
+    return `<div class="record-item">
+      <span class="record-dot" style="background:${dotColors[type]}"></span>
+      <div class="record-body">
+        <div class="record-main">${badge ? `<span class="badge ${badgeClass}">${badge}</span>` : ''}${main}</div>
+        ${r.note ? `<div class="record-note">${r.note}</div>` : ''}
+      </div>
+      <span class="record-date">${r.date}</span>
+      <button class="del-btn" onclick="deleteRecord('${type}',${i})" title="削除">×</button>
+    </div>`;
+  }).join('');
+}
+
+function renderGraphs() {
+  const wRecs = [...data.weight].filter(r => r.weight).sort((a,b) => a.date.localeCompare(b.date));
+  const wkRecs = [...data.walk].filter(r => r.minutes).sort((a,b) => a.date.localeCompare(b.date));
+
+  document.getElementById('graph-summary').innerHTML = `
+    <div class="metric"><div class="metric-val">${data.weight.length}</div><div class="metric-lbl">体重・食事の記録</div></div>
+    <div class="metric"><div class="metric-val">${data.walk.length}</div><div class="metric-lbl">散歩の記録</div></div>
+    <div class="metric"><div class="metric-val">${data.medical.length}</div><div class="metric-lbl">医療の記録</div></div>
+    <div class="metric"><div class="metric-val">${data.care.length}</div><div class="metric-lbl">ケアの記録</div></div>
+  `;
+
+  if (wChart) wChart.destroy();
+  wChart = new Chart(document.getElementById('weightChart'), {
+    type: 'line',
+    data: {
+      labels: wRecs.map(r => r.date.slice(5)),
+      datasets: [{
+        label: '体重(kg)', data: wRecs.map(r => r.weight),
+        borderColor: '#3A6FA8', backgroundColor: 'rgba(58,111,168,0.08)',
+        tension: 0.3, pointRadius: 5, fill: true, borderWidth: 2
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: { y: { ticks: { callback: v => v + 'kg' } }, x: { ticks: { autoSkip: true, maxTicksLimit: 8 } } }
+    }
+  });
+
+  if (wkChart) wkChart.destroy();
+  wkChart = new Chart(document.getElementById('walkChart'), {
+    type: 'bar',
+    data: {
+      labels: wkRecs.map(r => r.date.slice(5)),
+      datasets: [{
+        label: '散歩時間(分)', data: wkRecs.map(r => r.minutes),
+        backgroundColor: 'rgba(74,124,89,0.75)', borderRadius: 5
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: { y: { ticks: { callback: v => v + '分' } }, x: { ticks: { autoSkip: true, maxTicksLimit: 8 } } }
+    }
+  });
+}
+
+load();
+['weight','walk','medical','care'].forEach(renderRecords);
+</script>
+</body>
+</html>
